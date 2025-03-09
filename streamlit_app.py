@@ -673,6 +673,21 @@ class helpers:
         )
         if 'marker_size' not in st.session_state:
             st.session_state['marker_size'] = 4
+
+        for index, row in df.iterrows():
+            if row['Your Score'] > 4000:
+                fig.add_scattermapbox(lat=[row[lat_col]],
+                               lon=[row[lon_col]],
+                               mode='markers+text',
+                               marker=dict(line=dict(width=2, color='black')),
+                               )
+            else:
+                fig.add_scattermapbox(lat=[row[lat_col]],
+                               lon=[row[lon_col]],
+                               mode='markers+text',
+                               marker=dict(),
+                                )
+        
         fig.update_traces(marker=dict(size=st.session_state['marker_size']))
         fig.update_layout(map_style="open-street-map")
         fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
