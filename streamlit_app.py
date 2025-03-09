@@ -658,8 +658,7 @@ class helpers:
             lat=lat_col,
             lon=lon_col,
             color=metric_col,
-            color_continuous_scale=color_,
-            projection="mercator",
+            color_continuous_scale=color_
         )
         if 'marker_size' not in st.session_state:
             st.session_state['marker_size'] = 4
