@@ -651,7 +651,7 @@ class helpers:
         if metric_col == 'Distance':
             color_ = px.colors.sequential.Turbo
             metric_col = 'Your Distance'
-        if metric_col == 'Score':
+        if metric_col == 'Your Score':
             color_ = [
                     [0, 'rgb(0, 0, 0)'], 
                     [0.3, 'rgb(243, 10, 10)'],
