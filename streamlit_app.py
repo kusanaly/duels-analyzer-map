@@ -645,12 +645,14 @@ class helpers:
 
     @staticmethod
     def create_map(df, metric_col):
-        lat_col = 'Your Latitude'
-        lon_col = 'Your Longitude'
+        lat_col = 'Latitude'
+        lon_col = 'Longitude'
         color_ = px.colors.sequential.Turbo_r
         if metric_col == 'Distance':
             color_ = px.colors.sequential.Turbo
             metric_col = 'Your Distance'
+        
+        
         fig = px.scatter_geo(
             df,
             lat=lat_col,
