@@ -653,7 +653,7 @@ class helpers:
             metric_col = 'Your Distance'
         
         
-        fig = px.scatter_mapbox(
+        fig = px.scatter_map(
             df,
             lat=lat_col,
             lon=lon_col,
@@ -664,7 +664,7 @@ class helpers:
         if 'marker_size' not in st.session_state:
             st.session_state['marker_size'] = 4
         fig.update_traces(marker=dict(size=st.session_state['marker_size']))
-        fig.update_layout(mapbox_style="open-street-map")
+        fig.update_layout(map_style="open-street-map")
         fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
         st.plotly_chart(fig)
         st.slider('Marker Size', min_value=1, max_value=10,
