@@ -651,23 +651,24 @@ class helpers:
         if metric_col == 'Distance':
             color_ = px.colors.sequential.Turbo
             metric_col = 'Your Distance'
-        
-        colorscale_ = [
-        [0, 'rgb(0, 0, 0)'], 
-        [0.4, 'rgb(243, 10, 10)'],
-        [0.6, 'rgb(234, 174, 19)'],
-        [0.8, 'rgb(220, 231, 22)'],
-        [0.9, 'rgb(26, 227, 40)'],
-        [0.96, 'rgb(23, 220, 210)'],
-        [0.998, 'rgb(17, 26, 179)'],
-        [1, 'rgb(238, 38, 218)']
-        ]
+        if metric_col == 'Score':
+            color_ = [
+                    [0, 'rgb(0, 0, 0)'], 
+                    [0.3, 'rgb(243, 10, 10)'],
+                    [0.5, 'rgb(234, 174, 19)'],
+                    [0.75, 'rgb(220, 231, 22)'],
+                    [0.85, 'rgb(26, 227, 40)'],
+                    [0.95, 'rgb(23, 220, 210)'],
+                    [0.989, 'rgb(47, 47, 255)'],
+                    [0.99, 'rgb(255, 64, 213)'],
+                    [1, 'rgb(255, 64, 213)']
+                    ]
         fig = px.scatter_map(
             df,
             lat=lat_col,
             lon=lon_col,
             color=metric_col,
-            color_continuous_scale=colorscale_,
+            color_continuous_scale=color_,
             zoom=0
         )
         if 'marker_size' not in st.session_state:
