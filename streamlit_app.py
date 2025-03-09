@@ -676,13 +676,13 @@ class helpers:
 
         for index, row in df.iterrows():
             if row['Your Score'] > 4000:
-                fig.add_scattermapbox(lat=[row[lat_col]],
+                fig.add_scattermap(lat=[row[lat_col]],
                                lon=[row[lon_col]],
                                mode='markers+text',
                                marker=dict(line=dict(width=2, color='black')),
                                )
             else:
-                fig.add_scattermapbox(lat=[row[lat_col]],
+                fig.add_scattermap(lat=[row[lat_col]],
                                lon=[row[lon_col]],
                                mode='markers+text',
                                marker=dict(),
