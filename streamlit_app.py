@@ -678,13 +678,11 @@ class helpers:
             if row['Your Score'] > 4000:
                 fig.add_scattermap(lat=[row[lat_col]],
                                lon=[row[lon_col]],
-                               mode='markers+text',
-                               marker=dict(line=dict(width=2, color='black')),
+                               marker=dict(color='black'),
                                )
             else:
                 fig.add_scattermap(lat=[row[lat_col]],
                                lon=[row[lon_col]],
-                               mode='markers+text',
                                marker=dict(),
                                 )
         
