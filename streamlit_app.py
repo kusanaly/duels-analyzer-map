@@ -666,13 +666,25 @@ class helpers:
                     [1, 'rgb(255, 255, 255)']
                     ]}
         fig = go.Figure()
+
+        fig.add_trace(go.Scattermap(
+        lat=lat_col,
+        lon=lon_col,
+        mode='markers',
+        marker=go.scattermap.Marker(
+            size=10,
+            color="Black"
+        ),
+        text='Latitude',
+        hoverinfo='text'
+        ))
         
         fig.add_trace(go.Scattermap(
         lat=lat_col,
         lon=lon_col,
         mode='markers',
         marker=go.scattermap.Marker(
-            size=17,
+            size=6,
             color=df[metric_col]
         ),
         text='Latitude',
