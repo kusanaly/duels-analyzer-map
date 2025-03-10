@@ -658,10 +658,11 @@ class helpers:
                     [0.5, 'rgb(234, 174, 19)'],
                     [0.75, 'rgb(220, 231, 22)'],
                     [0.85, 'rgb(26, 227, 40)'],
+                    [0.90, 'rgb(34, 187, 175)'],
                     [0.95, 'rgb(23, 220, 210)'],
                     [0.989, 'rgb(47, 47, 255)'],
-                    [0.99, 'rgb(255, 64, 213)'],
-                    [1, 'rgb(255, 64, 213)']
+                    [0.99, 'rgb(255, 255, 255)'],
+                    [1, 'rgb(255, 255, 255)']
                     ]
         fig = px.scatter_map(
             df,
@@ -669,18 +670,13 @@ class helpers:
             lon=lon_col,
             color=metric_col,
             color_continuous_scale=color_,
-            zoom=0
+            zoom=0,
+            template="plotly_white"
         )
         if 'marker_size' not in st.session_state:
             st.session_state['marker_size'] = 4
 
-        for index, row in df.iterrows():
-            if row['Your Score'] > 4000:
-                fig.add_scattermap(lat=[row[lat_col]],
-                               lon=[row[lon_col]],
-                               marker=dict(color='white'),
-                               showlegend=False
-                               )
+
 
         
         fig.update_traces(marker=dict(size=st.session_state['marker_size']))
