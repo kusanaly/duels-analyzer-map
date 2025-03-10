@@ -676,7 +676,7 @@ class helpers:
 
         for index, row in df.iterrows():
             if row['Your Score'] > 4000:
-                fig.add_scatter(lat=[row[lat_col]],
+                fig.add_scattermap(lat=[row[lat_col]],
                                lon=[row[lon_col]],
                                marker=dict(color='white'),
                                showlegend=False
