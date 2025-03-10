@@ -683,7 +683,7 @@ class helpers:
         title=dict(text='Your guesses'),
         autosize=True,
         hovermode='closest',
-        color_continuous_scale=color_,
+        colorscale=color_,
         showlegend=False,
         map=dict(
         bearing=0,
