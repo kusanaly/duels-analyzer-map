@@ -5,6 +5,7 @@ from requests import Session
 import json
 # import helpers
 import plotly.express as px
+import plotly.graph_objects as go
 import altair as alt
 from datetime import timedelta
 import datetime
@@ -659,27 +660,45 @@ class helpers:
                     [0.75, 'rgb(220, 231, 22)'],
                     [0.85, 'rgb(26, 227, 40)'],
                     [0.90, 'rgb(34, 187, 175)'],
-                    [0.95, 'rgb(23, 220, 210)'],
+                    [0.95, 'rgb(24, 111, 197)'],
                     [0.989, 'rgb(47, 47, 255)'],
                     [0.99, 'rgb(255, 255, 255)'],
                     [1, 'rgb(255, 255, 255)']
                     ]
-        fig = px.scatter_map(
-            df,
-            lat=lat_col,
-            lon=lon_col,
-            color=metric_col,
-            color_continuous_scale=color_,
-            zoom=0,
-            template="plotly_white"
+        fig = go.Figure()
+        
+        fig.add_trace(go.Scattermap(
+        lat=lat_col,
+        lon=lon_col,
+        mode='markers',
+        marker=go.scattermap.Marker(
+            size=17,
+            color=metric_col
+        ),
+        text='Latitude',
+        hoverinfo='text'
+        ))
+
+        fig.update_layout(
+        title=dict(text='Your guesses'),
+        autosize=True,
+        hovermode='closest',
+        color_continuous_scale=color_,
+        showlegend=False,
+        map=dict(
+        bearing=0,
+        pitch=0,
+        zoom=0,
+        style='light'
+         ),
         )
+
         if 'marker_size' not in st.session_state:
             st.session_state['marker_size'] = 4
 
-
-
         
         fig.update_traces(marker=dict(size=st.session_state['marker_size']))
+        
         fig.update_layout(map_style="open-street-map")
         fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
         st.plotly_chart(fig)
