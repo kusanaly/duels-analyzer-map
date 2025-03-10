@@ -684,7 +684,6 @@ class helpers:
         autosize=True,
         hovermode='closest',
         showlegend=False,
-        autocolorscale=True,
         colorscale=color_,
         map=dict(
         bearing=0,
