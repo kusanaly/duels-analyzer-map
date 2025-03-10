@@ -678,13 +678,10 @@ class helpers:
             if row['Your Score'] > 4000:
                 fig.add_scattermap(lat=[row[lat_col]],
                                lon=[row[lon_col]],
-                               marker=dict(color='black'),
+                               marker=dict(line=dict(width=2,
+                                        color='DarkSlateGrey'), color='white'),
                                )
-            else:
-                fig.add_scattermap(lat=[row[lat_col]],
-                               lon=[row[lon_col]],
-                               marker=dict(),
-                                )
+
         
         fig.update_traces(marker=dict(size=st.session_state['marker_size']))
         fig.update_layout(map_style="open-street-map")
