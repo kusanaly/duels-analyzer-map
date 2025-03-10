@@ -673,7 +673,7 @@ class helpers:
         mode='markers',
         marker=go.scattermap.Marker(
             size=17,
-            color=df.metric_col
+            color=df[metric_col]
         ),
         text='Latitude',
         hoverinfo='text'
