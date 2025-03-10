@@ -670,7 +670,6 @@ class helpers:
         fig.add_trace(go.Scattermap(
         lat=lat_col,
         lon=lon_col,
-        colorscale=color_,
         mode='markers',
         marker=go.scattermap.Marker(
             size=17,
@@ -685,6 +684,7 @@ class helpers:
         autosize=True,
         hovermode='closest',
         showlegend=False,
+        colorscale=color_,
         map=dict(
         bearing=0,
         pitch=0,
