@@ -653,7 +653,7 @@ class helpers:
             color_ = px.colors.sequential.Turbo
             metric_col = 'Your Distance'
         if metric_col == 'Your Score':
-            color_ = [
+            color_ = {"sequential": [
                     [0, 'rgb(0, 0, 0)'], 
                     [0.3, 'rgb(243, 10, 10)'],
                     [0.5, 'rgb(234, 174, 19)'],
@@ -664,7 +664,7 @@ class helpers:
                     [0.989, 'rgb(47, 47, 255)'],
                     [0.99, 'rgb(255, 255, 255)'],
                     [1, 'rgb(255, 255, 255)']
-                    ]
+                    ]}
         fig = go.Figure()
         
         fig.add_trace(go.Scattermap(
@@ -684,6 +684,7 @@ class helpers:
         autosize=True,
         hovermode='closest',
         showlegend=False,
+        autocolorscale=True,
         colorscale=color_,
         map=dict(
         bearing=0,
