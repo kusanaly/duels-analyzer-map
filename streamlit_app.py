@@ -156,7 +156,7 @@ class helpers:
                         data_dict['Your Distance'].append(0)
                         data_dict['Your Score'].append(0)
 
-                    if my_guess['score']>4950:
+                    if int(my_guess['score']) > 4950:
                         data_dict['5k Border'].append(15)
                     else:
                         data_dict['5k Border'].append(5)
