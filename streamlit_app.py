@@ -157,9 +157,9 @@ class helpers:
                         data_dict['Your Score'].append(0)
 
                     if int(my_guess['score']) > 4950:
-                        data_dict['5k Border'].append(15)
+                        data_dict['5k Border'].append(12)
                     else:
-                        data_dict['5k Border'].append(5)
+                        data_dict['5k Border'].append(7)
 
                     other_guess = [guess for guess in game['teams'][other]
                                    ['players'][0]['guesses'] if guess['roundNumber'] == i+1]
