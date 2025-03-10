@@ -646,8 +646,8 @@ class helpers:
 
     @staticmethod
     def create_map(df, metric_col):
-        lat_col = 'Latitude'
-        lon_col = 'Longitude'
+        lat_col = df['Latitude']
+        lon_col = df['Longitude']
         color_ = px.colors.sequential.Turbo_r
         if metric_col == 'Distance':
             color_ = px.colors.sequential.Turbo
