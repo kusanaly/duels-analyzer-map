@@ -109,7 +109,8 @@ class helpers:
                           'Your Rating': [],
                           'Opponent Rating': [],
                           'Score Difference': [],
-                          'Win Percentage': []
+                          'Win Percentage': [],
+                          '5k Border': []
                           })
 
         BASE_URL_V3 = "https://game-server.geoguessr.com/api/duels"
@@ -154,6 +155,11 @@ class helpers:
                         data_dict['Your Longitude'].append(0)
                         data_dict['Your Distance'].append(0)
                         data_dict['Your Score'].append(0)
+
+                    if my_guess['score']>4950:
+                        data_dict['5k Border'].append(15)
+                    else:
+                        data_dict['5k Border'].append(5)
 
                     other_guess = [guess for guess in game['teams'][other]
                                    ['players'][0]['guesses'] if guess['roundNumber'] == i+1]
@@ -672,7 +678,7 @@ class helpers:
         lon=lon_col,
         mode='markers',
         marker=go.scattermap.Marker(
-            size=10,
+            size=df["5k Border"],
             color="Black"
         ),
         text='Latitude',
