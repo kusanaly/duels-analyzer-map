@@ -711,17 +711,17 @@ class helpers:
          ),
         )
 
-        if 'marker_size' not in st.session_state:
-            st.session_state['marker_size'] = 4
+        #if 'marker_size' not in st.session_state:
+         #   st.session_state['marker_size'] = 4
 
         
-        fig.update_traces(marker=dict(size=st.session_state['marker_size']))
+        #fig.update_traces(marker=dict(size=st.session_state['marker_size']))
         
         fig.update_layout(map_style="open-street-map")
         fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
         st.plotly_chart(fig)
-        st.slider('Marker Size', min_value=1, max_value=10,
-                  value=st.session_state['marker_size'], step=1, key='marker_size')
+       # st.slider('Marker Size', min_value=1, max_value=10,
+       #           value=st.session_state['marker_size'], step=1, key='marker_size')
 
     @staticmethod
     def create_line_chart(df,  metric_col, date_option):
