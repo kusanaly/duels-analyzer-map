@@ -151,18 +151,20 @@ class helpers:
                         data_dict['Your Distance'].append(
                             my_guess['distance']/1000)
                         data_dict['Your Score'].append(my_guess['score'])
+                        if int(my_guess['score']) > 4950:
+                            data_dict['5k Border'].append(11)
+                        else:
+                            data_dict['5k Border'].append(7)
                     else:
                         data_dict['Your Latitude'].append(0)
                         data_dict['Your Longitude'].append(0)
                         data_dict['Your Distance'].append(0)
                         data_dict['Your Score'].append(0)
+                        data_dict['5k Border'].append(0)
 
                     #os.write(1,str.encode(str(my_guess['score'])))
                     
-                    if int(my_guess['score']) > 4950:
-                        data_dict['5k Border'].append(11)
-                    else:
-                        data_dict['5k Border'].append(7)
+                    
 
                     other_guess = [guess for guess in game['teams'][other]
                                    ['players'][0]['guesses'] if guess['roundNumber'] == i+1]
