@@ -665,7 +665,7 @@ class helpers:
             metric_col = 'Your Distance'
         if metric_col == 'Your Score':
             color_ = {"sequential": [
-                    [0, 'rgb(0, 0, 0)'], 
+                    [0, 'rgb(191, 34, 34)'], 
                     [0.3, 'rgb(243, 10, 10)'],
                     [0.5, 'rgb(234, 174, 19)'],
                     [0.75, 'rgb(220, 231, 22)'],
