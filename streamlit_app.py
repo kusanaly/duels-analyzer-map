@@ -151,7 +151,7 @@ class helpers:
                         data_dict['Your Distance'].append(
                             my_guess['distance']/1000)
                         data_dict['Your Score'].append(my_guess['score'])
-                        if int(my_guess['score']) > 4950:
+                        if int(my_guess['score']) > 4980:
                             data_dict['5k Border'].append(11)
                         else:
                             data_dict['5k Border'].append(7)
@@ -656,9 +656,9 @@ class helpers:
         return by_country_against
 
     @staticmethod
-    def create_map(df, metric_col):
-        lat_col = df['Latitude']
-        lon_col = df['Longitude']
+    def create_map(df, metric_col, gametype):
+        lat_col = df['Latitude'].loc[df['Game Mode'] == gametype]
+        lon_col = df['Longitude'].loc[df['Game Mode'] == gametype]
         color_ = px.colors.sequential.Turbo_r
         if metric_col == 'Distance':
             color_ = px.colors.sequential.Turbo
@@ -672,8 +672,8 @@ class helpers:
                     [0.85, 'rgb(26, 227, 40)'],
                     [0.90, 'rgb(34, 187, 175)'],
                     [0.95, 'rgb(24, 111, 197)'],
-                    [0.989, 'rgb(47, 47, 255)'],
-                    [0.99, 'rgb(255, 255, 255)'],
+                    [0.995, 'rgb(47, 47, 255)'],
+                    [0.996, 'rgb(255, 255, 255)'],
                     [1, 'rgb(255, 255, 255)']
                     ]}
         fig = go.Figure()
@@ -1056,30 +1056,17 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     else:
                         metric_col = metric
 
-                    st.markdown(f"#### Average {metric} by Country")
-                    helpers.display_country_scores_map(
-                        top_n_countries.reset_index(), "Country", metric_col)
-
-                    helpers.sorted_bar_chart(
-                        top_n_countries, 'Country', metric_col)
-
-                    st.markdown(f"#### Average {metric} by Rounds")
-                    by_round = helpers.groupby_round(df_filtered)
-                    helpers.sorted_bar_chart(
-                        by_round, 'Round Number', metric_col)
-
-                    st.markdown(f"#### Average {metric} by Time Periods")
-                    helpers.create_binned_histogram(df_filtered, metric_col)
-
-                    st.markdown(
-                        f"#### Average {metric} against players from other Countries")
-                    by_country_against = helpers.groupby_country_against(
-                        df_filtered)
-                    helpers.sorted_bar_chart(
-                        by_country_against, 'Opponent Country', metric_col)
+                    gtype = st.radio(
+                        'Choose a game Type:', ('Moving', 'No Move', 'NMPZ'))
+                    if gtype == 'Moving':
+                        gametype = 'StandardDuels'
+                    elif gtype == 'No Move':
+                        gametype = 'NoMoveDuels'
+                    else:
+                        gametype = 'NmpzDuels'
 
                     st.markdown(f"#### All your guesses, colored by {metric}")
-                    helpers.create_map(df_filtered, metric_col)
+                    helpers.create_map(df_filtered, metric_col, gametype)
 
                     st.markdown(f"#### {metric} distribution by Country")
                     df_filtered_only_top_countries = df_filtered.reset_index()[df_filtered.reset_index(
