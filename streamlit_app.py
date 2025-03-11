@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from requests import Session
+import os
 import json
 # import helpers
 import plotly.express as px
@@ -155,7 +156,7 @@ class helpers:
                         data_dict['Your Longitude'].append(0)
                         data_dict['Your Distance'].append(0)
                         data_dict['Your Score'].append(0)
-                    sys.stdout.write(my_guess['score'])
+                    os.write(1,my_guess['score'])
                     if int(my_guess['score']) > 4950:
                         data_dict['5k Border'].append(11)
                     else:
