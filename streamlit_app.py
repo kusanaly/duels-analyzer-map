@@ -659,7 +659,6 @@ class helpers:
     def create_map(df, metric_col, gametype):
         lat_col = df['Latitude'].loc[df['Game Mode'] == gametype]
         lon_col = df['Longitude'].loc[df['Game Mode'] == gametype]
-        color_ = px.colors.sequential.Turbo_r
         if metric_col == 'Distance':
             metric_col = 'Your Distance'
         if metric_col == 'Your Score':
