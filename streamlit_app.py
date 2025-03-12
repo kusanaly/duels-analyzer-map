@@ -661,7 +661,6 @@ class helpers:
         lon_col = df['Longitude'].loc[df['Game Mode'] == gametype]
         color_ = px.colors.sequential.Turbo_r
         if metric_col == 'Distance':
-            color_ = px.colors.sequential.Turbo
             metric_col = 'Your Distance'
         if metric_col == 'Your Score':
             color_ = {"sequential": [
@@ -676,7 +675,7 @@ class helpers:
                     [0.996, 'rgb(255, 255, 255)'],
                     [1, 'rgb(255, 255, 255)']
                     ]}
-            elif metric_col == 'Your Distance':
+        elif metric_col == 'Your Distance':
             color_ = {"sequential": [
                     [0, 'rgb(255, 255, 255)'], 
                     [5, 'rgb(255, 255, 255)'],
