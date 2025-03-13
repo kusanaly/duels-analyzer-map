@@ -742,7 +742,7 @@ class helpers:
         ))
 
         fig.update_layout(
-        title=dict(text='Your guesses on the map:'),
+        title=dict(text='Your guesses!!!:'),
         autosize=True,
         hovermode='closest',
         showlegend=False,
