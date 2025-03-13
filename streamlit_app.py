@@ -714,6 +714,7 @@ class helpers:
                     [1, 'rgb(7, 41, 156)']
                     ]}
         fig = go.Figure()
+        st.write(f"\t{metric_col} %")
 
         fig.add_trace(go.Scattermap(
         lat=lat_col,
