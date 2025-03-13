@@ -657,6 +657,7 @@ class helpers:
 
     @staticmethod
     def create_map(df, metric_col, gametype):
+        st.write(f"\t{metric_col} %")
         lat_col = df['Latitude'].loc[df['Game Mode'] == gametype]
         lon_col = df['Longitude'].loc[df['Game Mode'] == gametype]
         color_ = {"sequential": [
@@ -714,7 +715,7 @@ class helpers:
                     [1, 'rgb(7, 41, 156)']
                     ]}
         fig = go.Figure()
-        st.write(f"\t{metric_col} %")
+
 
         fig.add_trace(go.Scattermap(
         lat=lat_col,
@@ -741,7 +742,7 @@ class helpers:
         ))
 
         fig.update_layout(
-        title=dict(text='Your guesses'),
+        title=dict(text='Your guesses on the map:'),
         autosize=True,
         hovermode='closest',
         showlegend=False,
