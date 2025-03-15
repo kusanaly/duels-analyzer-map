@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import dash
-from dash import dcc, html, Input, Output
+
 from requests import Session
 import os
 import json
@@ -1059,88 +1058,107 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                                 ]}
                     fig = go.Figure()
 
-                    app = dash.Dash(__name__)
+                    if not hasattr(st, 'already_started_server'):
+                        # Hack the fact that Python modules (like st) only load once to
+                        # keep track of whether this file already ran.
+                        st.already_started_server = True
+                        st.write('''
+                            The first time this script executes it will run forever because it's
+                            running a Flask server.
 
-                    app.layout = html.Div([
-                    dcc.Graph(
-                    id='scatter-plot',
-                    config={'displayModeBar': False},
-                    figure = fig
-                    )
-                    ])
+                            Just close this browser tab and open a new one to see your Streamlit
+                            app.
+                        ''')
+                        import dash
+                        from dash import dcc, html, Input, Output
 
-                    fig.add_trace(go.Scattermap(
-                    lat=lat_col,
-                    lon=lon_col,
-                    mode='markers',
-                    marker=go.scattermap.Marker(
-                            size=df_filtered["5k Border"],
-                            color="Black"
-                        ),
-                        text=df_filtered['Pano URL'],
-                        hoverinfo='text'
-                        ))
-                    
-                    fig.add_trace(go.Scattermap(
+                        app = dash.Dash(__name__)
+
+
+                        app.layout = html.Div([
+                        dcc.Graph(
+                        id='scatter-plot',
+                        config={'displayModeBar': False},
+                        figure = fig
+                        )
+                        ])
+
+                        fig.add_trace(go.Scattermap(
                         lat=lat_col,
                         lon=lon_col,
                         mode='markers',
                         marker=go.scattermap.Marker(
-                        size=6,
-                        color=df_filtered[metric_col]
-                        ),
-                        text=df_filtered['Pano URL'],
-                        hoverinfo='text'
-                        ))
+                                size=df_filtered["5k Border"],
+                                color="Black"
+                            ),
+                            text=df_filtered['Pano URL'],
+                            hoverinfo='text'
+                            ))
+                            
+                        fig.add_trace(go.Scattermap(
+                            lat=lat_col,
+                            lon=lon_col,
+                            mode='markers',
+                            marker=go.scattermap.Marker(
+                            size=6,
+                            color=df_filtered[metric_col]
+                            ),
+                            text=df_filtered['Pano URL'],
+                            hoverinfo='text'
+                            ))
 
-                    fig.update_layout(
-                        title=dict(text='Your guesses:'),
-                        autosize=True,
-                        hovermode='closest',
-                        showlegend=False,
-                        colorscale=color_,
-                        map=dict(
-                        bearing=0,
-                        pitch=0,
-                        zoom=0,
-                        style='light'
-                        ),
+                        fig.update_layout(
+                            title=dict(text='Your guesses:'),
+                            autosize=True,
+                            hovermode='closest',
+                            showlegend=False,
+                            colorscale=color_,
+                            map=dict(
+                            bearing=0,
+                            pitch=0,
+                            zoom=0,
+                            style='light'
+                            ),
+                            )
+
+                        if metric_col == 'Your Distance':
+                                fig.update_layout(coloraxis=dict(cmin=0, cmax=20000))
+                        if metric_col == 'Score Difference':
+                                fig.update_layout(coloraxis=dict(cmin=-5000, cmax=5000))
+
+                        fig.update_layout(map_style="open-street-map")
+                        fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
+                        st.plotly_chart(fig)
+
+
+                        @app.callback(
+                            Output('scatter-plot', 'figure'),
+                            Input('scatter-plot', 'clickData')
                         )
+                        def update_scatter_plot(clickData):
+                            fig.update_traces(hovertemplate='Click me!<extra></extra>')
+                        # Add custom hover text for each point
+                            return fig
 
-                    if metric_col == 'Your Distance':
-                            fig.update_layout(coloraxis=dict(cmin=0, cmax=20000))
-                    if metric_col == 'Score Difference':
-                            fig.update_layout(coloraxis=dict(cmin=-5000, cmax=5000))
+                        @app.callback(
+                            Output('scatter-plot', 'clickData'),
+                            Input('scatter-plot', 'clickData')
+                        )
+                        def display_click_data(clickData):
+                            if clickData:
+                                point_index = clickData['points'][0]['pointIndex']
+                            url = df['Pano URL'][point_index]
+                            # Open the URL in a new tab
+                            import webbrowser
+                            webbrowser.open(url)
+                            
+                            return clickData
+                        
+                        @app.route('/foo')
+                        def serve_foo():
+                            return 'This page is served via Flask!'
 
-                    fig.update_layout(map_style="open-street-map")
-                    fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
-                    st.plotly_chart(fig)
-
-
-                    @app.callback(
-                        Output('scatter-plot', 'figure'),
-                        Input('scatter-plot', 'clickData')
-                    )
-                    def update_scatter_plot(clickData):
-                        fig.update_traces(hovertemplate='Click me!<extra></extra>')
-                    # Add custom hover text for each point
-                        return fig
-
-                    @app.callback(
-                        Output('scatter-plot', 'clickData'),
-                        Input('scatter-plot', 'clickData')
-                    )
-                    def display_click_data(clickData):
-                        if clickData:
-                            point_index = clickData['points'][0]['pointIndex']
-                        url = df['Pano URL'][point_index]
-                        # Open the URL in a new tab
-                        import webbrowser
-                        webbrowser.open(url)
-                    
-                        return clickData
-
-                    if __name__ == '__main__':
-                        app.run_server(debug=True, use_reloader=False, port=4444)
+                        if __name__ == '__main__':
+                            app.run_server(debug=True, use_reloader=False, port=4444)
                     #### Complete extracted data (Download for your own analysis)')
                     st.write(df_filtered)
