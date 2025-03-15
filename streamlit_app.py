@@ -731,19 +731,11 @@ class helpers:
         )
         ])
 
-        @app.callback(
-            Output('scatter-plot', 'figure'),
-            Input('scatter-plot', 'clickData')
-        )
-
-        def update_scatter_plot(clickData):
-
-        # Add custom hover text for each point
-            fig.add_trace(go.Scattermap(
-            lat=lat_col,
-            lon=lon_col,
-            mode='markers',
-            marker=go.scattermap.Marker(
+        fig.add_trace(go.Scattermap(
+        lat=lat_col,
+        lon=lon_col,
+        mode='markers',
+        marker=go.scattermap.Marker(
                 size=df["5k Border"],
                 color="Black"
             ),
@@ -751,7 +743,7 @@ class helpers:
             hoverinfo='text'
             ))
         
-            fig.add_trace(go.Scattermap(
+        fig.add_trace(go.Scattermap(
             lat=lat_col,
             lon=lon_col,
             mode='markers',
@@ -763,7 +755,7 @@ class helpers:
             hoverinfo='text'
             ))
 
-            fig.update_layout(
+        fig.update_layout(
             title=dict(text='Your guesses:'),
             autosize=True,
             hovermode='closest',
@@ -777,15 +769,24 @@ class helpers:
             ),
             )
 
-            if metric_col == 'Your Distance':
+        if metric_col == 'Your Distance':
                 fig.update_layout(coloraxis=dict(cmin=0, cmax=20000))
-            if metric_col == 'Score Difference':
+        if metric_col == 'Score Difference':
                 fig.update_layout(coloraxis=dict(cmin=-5000, cmax=5000))
 
-            fig.update_layout(map_style="open-street-map")
-            fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
-            st.plotly_chart(fig)
-            fig.update_traces(hovertemplate='Click me!<extra></extra>')
+        fig.update_layout(map_style="open-street-map")
+        fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
+        st.plotly_chart(fig)
+
+
+        @app.callback(
+            Output('scatter-plot', 'figure'),
+            Input('scatter-plot', 'clickData')
+        )
+
+        def update_scatter_plot(clickData):
+                fig.update_traces(hovertemplate='Click me!<extra></extra>')
+        # Add custom hover text for each point
 
         return fig
 
