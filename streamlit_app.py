@@ -111,7 +111,7 @@ class helpers:
                           'Opponent Rating': [],
                           'Score Difference': [],
                           'Win Percentage': [],
-                          '5k Border': []
+                          '5k Border': [],
                           'Pano URL': []
                           })
 
