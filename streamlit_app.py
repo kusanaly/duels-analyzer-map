@@ -112,6 +112,7 @@ class helpers:
                           'Score Difference': [],
                           'Win Percentage': [],
                           '5k Border': []
+                          'Pano URL': []
                           })
 
         BASE_URL_V3 = "https://game-server.geoguessr.com/api/duels"
@@ -140,7 +141,9 @@ class helpers:
                     data_dict['Longitude'].append(round['panorama']['lng'])
                     data_dict['Damage Multiplier'].append(
                         round['damageMultiplier'])
-
+                    
+                    url_ = "https://www.google.com/maps?q=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&ll=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&z=8&msa=0&basemap=roadmap"
+                    data_dict['Pano URL'].append(url_)
                     # if no guess is made, there is no entry in guesses of that round, so we find if the round number in round and guess are same, if not, then NAN.
                     my_guess = [guess for guess in game['teams'][me]
                                 ['players'][0]['guesses'] if guess['roundNumber'] == i+1]
@@ -725,7 +728,7 @@ class helpers:
             size=df["5k Border"],
             color="Black"
         ),
-        text=str(df['Latitude']) + "\n" + str(df['Longitude']) + "\n" + str(df[metric_col]),
+        text=df['Pano URL'],
         hoverinfo='text'
         ))
         
@@ -737,7 +740,7 @@ class helpers:
             size=6,
             color=df[metric_col]
         ),
-        text=str(df['Latitude']) + "\n" + str(df['Longitude']) + "\n" + str(df[metric_col]),
+        text=df['Pano URL'],
         hoverinfo='text'
         ))
 
