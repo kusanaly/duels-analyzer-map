@@ -1141,6 +1141,6 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                         return clickData
 
                     if __name__ == '__main__':
-                        app.run(debug=True)
+                        app.run_server(debug=True, use_reloader=False)
                     #### Complete extracted data (Download for your own analysis)')
                     st.write(df_filtered)
