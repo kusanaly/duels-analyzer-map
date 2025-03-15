@@ -783,12 +783,10 @@ class helpers:
             Output('scatter-plot', 'figure'),
             Input('scatter-plot', 'clickData')
         )
-
         def update_scatter_plot(clickData):
-                fig.update_traces(hovertemplate='Click me!<extra></extra>')
+            fig.update_traces(hovertemplate='Click me!<extra></extra>')
         # Add custom hover text for each point
-
-        return fig
+            return fig
 
         @app.callback(
             Output('scatter-plot', 'clickData'),
@@ -802,7 +800,7 @@ class helpers:
             import webbrowser
             webbrowser.open(url)
         
-        return clickData
+            return clickData
 
         if __name__ == '__main__':
             app.run_server(debug=True)
