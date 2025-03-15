@@ -737,12 +737,12 @@ class helpers:
             size=6,
             color=df[metric_col]
         ),
-        text='Latitude',
+        text='<a href=\"https://plot.ly/\">name1</a>' + df['Latitude'] + df['Longitude'],
         hoverinfo='text'
         ))
 
         fig.update_layout(
-        title=dict(text='Your guesses!!!:'),
+        title=dict(text='Your guesses:'),
         autosize=True,
         hovermode='closest',
         showlegend=False,
@@ -754,6 +754,11 @@ class helpers:
         style='light'
          ),
         )
+
+        if metric_col == 'Your Distance':
+            fig.update_layout(marker=dict(cmin=0, cmax=20000))
+        if metric_col == 'Score Difference':
+            fig.update_layout(marker=dict(cmin=-5000, cmax=5000))
 
         #if 'marker_size' not in st.session_state:
          #   st.session_state['marker_size'] = 4
@@ -1096,7 +1101,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                         metric_col = metric
 
                     gtype = st.radio(
-                        'Choose a game Type:', ('Moving', 'No Move', 'NMPZ'))
+                        'Choose a game Type:', ('No Move', 'Moving', 'NMPZ'))
                     if gtype == 'Moving':
                         gametype = 'StandardDuels'
                     elif gtype == 'No Move':
@@ -1117,50 +1122,6 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     st.plotly_chart(
                         fig, help='If this is feels cramped, try decreasing the top country parameter at the top')
 
-                st.markdown(f"### Comparisons")
-                with st.expander(""):
-                    st.markdown('#### Comparison between different metrices')
-                    col1, col2, col3 = st.columns(3)
-                    options = ['Your Score', 'Opponent Score', 'Score Difference',
-                               'Win Percentage', 'Distance', 'Number of Rounds']
-                    with col1:
-                        choice1 = st.selectbox("Metric 1", options, index=0)
-                    with col2:
-                        choice2 = st.selectbox("Metric 2", options, index=3)
-                    with col3:
-                        choice3 = st.selectbox("Color by", options, index=5)
-                    show_avg_lines = st.checkbox(
-                        'Show average lines', value=True)
-                    helpers.scatter_scores(
-                        top_n_countries, choice1, choice2, show_avg_lines, color=choice3)
-
-                    st.markdown('#### Comparison between different duel types')
-                    col1, col2, col3 = st.columns(3)
-                    options_game_type = ['Moving', 'No Move', 'NMPZ']
-                    with col1:
-                        choice1 = st.selectbox(
-                            "Duel Type 1", options_game_type, index=0)
-                    with col2:
-                        choice2 = st.selectbox(
-                            "Duel Type 2", options_game_type, index=1)
-                    with col3:
-                        choice3 = st.selectbox("Metric", options, index=0)
-                    show_avg_lines = st.checkbox(
-                        'Show average lines', value=True, key='sdfssc')
-                    helpers.scatter_by_game_type(
-                        top_n_countries, df_filtered, choice1, choice2, choice3, show_avg_lines)
-
-                st.markdown('### Other Analysis')
-                with st.expander(''):
-                    st.markdown('#### Round Count by Country')
-                    helpers.sorted_bar_chart(
-                        by_country, 'Country', 'Number of Rounds')
-                    st.markdown('#### Round Count')
-                    helpers.sorted_bar_chart(
-                        by_round, 'Round Number', 'Number of Rounds')
-                    st.markdown('#### Number of games played')
-                    helpers.create_line_chart_games_played(df_filtered, 'Week')
-
-                    st.markdown(
-                        '#### Complete extracted data (Download for your own analysis)')
+                
+                    #### Complete extracted data (Download for your own analysis)')
                     st.write(df_filtered)
