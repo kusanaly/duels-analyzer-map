@@ -725,7 +725,7 @@ class helpers:
             size=df["5k Border"],
             color="Black"
         ),
-        text=str(df['Latitude']) + "\n" str(df['Longitude']) + "\n" + str(df[metric_col]),
+        text=str(df['Latitude']) + "\n" + str(df['Longitude']) + "\n" + str(df[metric_col]),
         hoverinfo='text'
         ))
         
@@ -737,7 +737,7 @@ class helpers:
             size=6,
             color=df[metric_col]
         ),
-        text=str(df['Latitude']) + "\n" str(df['Longitude']) + "\n" + str(df[metric_col]),
+        text=str(df['Latitude']) + "\n" + str(df['Longitude']) + "\n" + str(df[metric_col]),
         hoverinfo='text'
         ))
 
