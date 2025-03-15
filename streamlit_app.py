@@ -756,9 +756,9 @@ class helpers:
         )
 
         if metric_col == 'Your Distance':
-            fig.update_layout(marker=dict(cmin=0, cmax=20000))
+            fig.update_layout(coloraxis=dict(cmin=0, cmax=20000))
         if metric_col == 'Score Difference':
-            fig.update_layout(marker=dict(cmin=-5000, cmax=5000))
+            fig.update_layout(coloraxis=dict(cmin=-5000, cmax=5000))
 
         #if 'marker_size' not in st.session_state:
          #   st.session_state['marker_size'] = 4
