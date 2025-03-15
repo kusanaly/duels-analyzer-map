@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import dash
+from dash import dcc, html, Input, Output
 from requests import Session
 import os
 import json
@@ -719,59 +721,92 @@ class helpers:
                     ]}
         fig = go.Figure()
 
+        app = dash.Dash(__name__)
 
-        fig.add_trace(go.Scattermap(
-        lat=lat_col,
-        lon=lon_col,
-        mode='markers',
-        marker=go.scattermap.Marker(
-            size=df["5k Border"],
-            color="Black"
-        ),
-        text=df['Pano URL'],
-        hoverinfo='text'
-        ))
-        
-        fig.add_trace(go.Scattermap(
-        lat=lat_col,
-        lon=lon_col,
-        mode='markers',
-        marker=go.scattermap.Marker(
-            size=6,
-            color=df[metric_col]
-        ),
-        text=df['Pano URL'],
-        hoverinfo='text'
-        ))
+        app.layout = html.Div([
+        dcc.Graph(
+        id='scatter-plot',
+        config={'displayModeBar': False},
+        figure = fig
+        )
+        ])
 
-        fig.update_layout(
-        title=dict(text='Your guesses:'),
-        autosize=True,
-        hovermode='closest',
-        showlegend=False,
-        colorscale=color_,
-        map=dict(
-        bearing=0,
-        pitch=0,
-        zoom=0,
-        style='light'
-         ),
+        @app.callback(
+            Output('scatter-plot', 'figure'),
+            Input('scatter-plot', 'clickData')
         )
 
-        if metric_col == 'Your Distance':
-            fig.update_layout(coloraxis=dict(cmin=0, cmax=20000))
-        if metric_col == 'Score Difference':
-            fig.update_layout(coloraxis=dict(cmin=-5000, cmax=5000))
+        def update_scatter_plot(clickData):
 
-        #if 'marker_size' not in st.session_state:
-         #   st.session_state['marker_size'] = 4
+        # Add custom hover text for each point
+            fig.add_trace(go.Scattermap(
+            lat=lat_col,
+            lon=lon_col,
+            mode='markers',
+            marker=go.scattermap.Marker(
+                size=df["5k Border"],
+                color="Black"
+            ),
+            text=df['Pano URL'],
+            hoverinfo='text'
+            ))
+        
+            fig.add_trace(go.Scattermap(
+            lat=lat_col,
+            lon=lon_col,
+            mode='markers',
+            marker=go.scattermap.Marker(
+            size=6,
+            color=df[metric_col]
+            ),
+            text=df['Pano URL'],
+            hoverinfo='text'
+            ))
 
+            fig.update_layout(
+            title=dict(text='Your guesses:'),
+            autosize=True,
+            hovermode='closest',
+            showlegend=False,
+            colorscale=color_,
+            map=dict(
+            bearing=0,
+            pitch=0,
+            zoom=0,
+            style='light'
+            ),
+            )
+
+            if metric_col == 'Your Distance':
+                fig.update_layout(coloraxis=dict(cmin=0, cmax=20000))
+            if metric_col == 'Score Difference':
+                fig.update_layout(coloraxis=dict(cmin=-5000, cmax=5000))
+
+            fig.update_layout(map_style="open-street-map")
+            fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
+            st.plotly_chart(fig)
+            fig.update_traces(hovertemplate='Click me!<extra></extra>')
+
+        return fig
+
+        @app.callback(
+            Output('scatter-plot', 'clickData'),
+            Input('scatter-plot', 'clickData')
+        )
+        def display_click_data(clickData):
+            if clickData:
+                point_index = clickData['points'][0]['pointIndex']
+            url = df['Pano URL'][point_index]
+            # Open the URL in a new tab
+            import webbrowser
+            webbrowser.open(url)
         
-        #fig.update_traces(marker=dict(size=st.session_state['marker_size']))
-        
-        fig.update_layout(map_style="open-street-map")
-        fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
-        st.plotly_chart(fig)
+        return clickData
+
+        if __name__ == '__main__':
+            app.run_server(debug=True)
+
+
        # st.slider('Marker Size', min_value=1, max_value=10,
        #           value=st.session_state['marker_size'], step=1, key='marker_size')
 
