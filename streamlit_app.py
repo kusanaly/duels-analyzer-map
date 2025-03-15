@@ -661,14 +661,6 @@ class helpers:
         return by_country_against
 
     @staticmethod
-    def create_map(df, metric_col, gametype):
-
-
-
-       # st.slider('Marker Size', min_value=1, max_value=10,
-       #           value=st.session_state['marker_size'], step=1, key='marker_size')
-
-    @staticmethod
     def create_line_chart(df,  metric_col, date_option):
         date_col = 'Date'
 
@@ -1022,6 +1014,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     [0.996, 'rgb(255, 255, 255)'],
                     [1, 'rgb(255, 255, 255)']
                     ]}
+
                     if metric_col == 'Distance':
                         metric_col = 'Your Distance'
                     if metric_col == 'Your Score':
