@@ -29,7 +29,7 @@ app.layout = [
             'height': '600px',
             'border': 'none'
         }
-    )
+    ),
     dcc.Graph(
             id='scatter-plot',
             config={'displayModeBar': False},
