@@ -114,7 +114,9 @@ class helpers:
                           'Score Difference': [],
                           'Win Percentage': [],
                           '5k Border': [],
-                          'Pano URL': []
+                          'Pano URL': [],
+                          'Pano ID': [],
+                          'heading': []
                           })
 
         BASE_URL_V3 = "https://game-server.geoguessr.com/api/duels"
@@ -136,6 +138,9 @@ class helpers:
                 for i in range(game['currentRoundNumber']):
                     round = game['rounds'][i]
 
+                    data_dict['Pano ID'].append(round['panorama']['panoId'])
+                    data_dict['heading'].append(round['panorama']['heading'])
+
                     data_dict['Round Number'].append(round['roundNumber'])
                     data_dict['Country'].append(
                         helpers.get_country_name(round['panorama']['countryCode']))
@@ -144,7 +149,7 @@ class helpers:
                     data_dict['Damage Multiplier'].append(
                         round['damageMultiplier'])
                     
-                    url_ = "<a href=\"https://www.google.com/maps?q=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&ll=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&z=8&msa=0&basemap=roadmap\">loc</a>"
+                    url_ = "<a href=\"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&heading=0&pitch=0&fov=80\">loc link</a>"
                     data_dict['Pano URL'].append(url_)
                     # if no guess is made, there is no entry in guesses of that round, so we find if the round number in round and guess are same, if not, then NAN.
                     my_guess = [guess for guess in game['teams'][me]
@@ -937,7 +942,28 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     
                         return clickData
 
-                    if __name__ == '__main__':
-                        app.run_server(debug=True, use_reloader=False, port=4444)
+                    #if __name__ == '__main__':
+                    #    app.run_server(debug=True, use_reloader=False, port=4444)
                     #### Complete extracted data (Download for your own analysis)')
                     st.write(df_filtered)
+
+                    badlocs = pd.DataFrame()
+                    badlocs=df[~df['Your Score'].between(0, 1000)]
+
+                    json_ = "{\"name\":\"test\",\"customCoordinates\":["
+
+                    for index, row in badlocs.iterrows():
+                        loc_ = "{\"lat\":" + row['Latitude'] + ",\"lng\":" +  row['Longitude'] + "",\"pitch\":0,\"zoom\":0,\"heading\":" + row['heading'] + ",\"panoId\":null,\"countryCode\":null,\"stateCode\":null,\"extra\":{\"tags\":[]}},"
+                        json_ = json_ + loc_
+
+                    json_ = json_ + "]}"
+
+                    if st.button("Prepare download"):
+                        st.download_button(
+                            label="Download text",
+                            data=json_,
+                            file_name="locations.json",
+                            on_click="ignore",
+                            type="primary",
+                            icon=":material/download:",
+                        )
