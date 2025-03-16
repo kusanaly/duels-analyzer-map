@@ -948,7 +948,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     st.write(df_filtered)
 
                     badlocs = pd.DataFrame()
-                    badlocs=df[~df['Your Score'].between(0, 1000)]
+                    badlocs=df[~df['Your Score'].between(0, 300)]
 
                     json_ = "{\"name\":\"test\",\"customCoordinates\":["
 
