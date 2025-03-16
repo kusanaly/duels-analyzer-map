@@ -20,6 +20,8 @@ def run_streamlit_app(file_name):
 
 app = dash.Dash(__name__)
 
+fig = go.Figure()
+
 app.layout = [
     html.Div('This is the dash app.'),
     html.Iframe(
@@ -36,8 +38,6 @@ app.layout = [
             figure=fig
             )
     ]
-
-fig = go.Figure()
 
 fig.add_trace(go.Scattermap(
         lat=lat_col,
