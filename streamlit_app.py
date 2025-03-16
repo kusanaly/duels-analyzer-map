@@ -144,7 +144,7 @@ class helpers:
                     data_dict['Damage Multiplier'].append(
                         round['damageMultiplier'])
                     
-                    url_ = "https://www.google.com/maps?q=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&ll=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&z=8&msa=0&basemap=roadmap"
+                    url_ = "< a href=\"https://www.google.com/maps?q=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&ll=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&z=8&msa=0&basemap=roadmap\">loc</a>"
                     data_dict['Pano URL'].append(url_)
                     # if no guess is made, there is no entry in guesses of that round, so we find if the round number in round and guess are same, if not, then NAN.
                     my_guess = [guess for guess in game['teams'][me]
@@ -938,6 +938,6 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                         return clickData
 
                     if __name__ == '__main__':
-                        app.run_server(debug=True, use_reloader=False)
+                        app.run_server(debug=True, use_reloader=False, port=4444)
                     #### Complete extracted data (Download for your own analysis)')
                     st.write(df_filtered)
