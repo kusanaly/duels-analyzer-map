@@ -953,7 +953,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     json_ = "{\"name\":\"test\",\"customCoordinates\":["
 
                     for index, row in badlocs.iterrows():
-                        loc_ = "{\"lat\":" + row['Latitude'] + ",\"lng\":" +  row['Longitude'] + ",\"pitch\":0,\"zoom\":0,\"heading\":" + row['heading'] + ",\"panoId\":null,\"countryCode\":null,\"stateCode\":null,\"extra\":{\"tags\":[]}},"
+                        loc_ = "{\"lat\":" + str(row['Latitude']) + ",\"lng\":" +  str(row['Longitude']) + ",\"pitch\":0,\"zoom\":0,\"heading\":" + str(row['heading']) + ",\"panoId\":null,\"countryCode\":null,\"stateCode\":null,\"extra\":{\"tags\":[]}},"
                         json_ = json_ + loc_
 
                     json_ = json_ + "]}"
