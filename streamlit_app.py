@@ -882,7 +882,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                         size=6,
                         color=df_filtered[metric_col]
                         ),
-                        text=df_filtered['Pano URL'] + ", " + df_filtered[metric_col],
+                        text=df_filtered['Pano URL'] + ", " + str(df_filtered[metric_col]),
                         hoverinfo='text'
                         ))
 
