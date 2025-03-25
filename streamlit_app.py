@@ -149,7 +149,8 @@ class helpers:
                     data_dict['Damage Multiplier'].append(
                         round['damageMultiplier'])
                     
-                    url_ = "<a href=\"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&heading=0&pitch=0&fov=80\">loc link</a>< br/>Score difference:" + str(data_dict['Your Score'][-1] - data_dict['Opponent Score'][-1])
+                    url_ = "<a href=\"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&heading=0&pitch=0&fov=80\">loc link</a>< br/>Score difference:" 
+                    #+ str(data_dict['Your Score'][-1] - data_dict['Opponent Score'][-1])
                     data_dict['Pano URL'].append(url_)
                     # if no guess is made, there is no entry in guesses of that round, so we find if the round number in round and guess are same, if not, then NAN.
                     my_guess = [guess for guess in game['teams'][me]
