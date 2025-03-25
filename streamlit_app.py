@@ -847,8 +847,8 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                                 ]}
                     if metric_col == 'Score Difference':
                         color_ = {"sequential": [
-                                [0, 'rgb(162, 10, 0)'], 
-                                [0.2, 'rgb(224, 69, 10)'],
+                                [0, 'rgb(242, 255, 0)'], 
+                                [0.2, 'rgb(242, 255, 0)'],
                                 [0.4, 'rgb(242, 255, 0)'],
                                 [0.45, 'rgb(242, 255, 0)'],
                                 [0.475, 'rgb(242, 255, 0)'],
@@ -858,8 +858,8 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                                 [0.525, 'rgb(255, 0, 233)'],
                                 [0.55, 'rgb(255, 0, 233)'],
                                 [0.6, 'rgb(255, 0, 233)'],
-                                [0.8, 'rgb(7, 156, 89)'],
-                                [1, 'rgb(0, 12, 158)']
+                                [0.8, 'rgb(255, 0, 233)'],
+                                [1, 'rgb(255, 0, 233)']
                                 ]}
                     fig = go.Figure()
 
