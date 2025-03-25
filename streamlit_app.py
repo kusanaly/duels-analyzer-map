@@ -149,7 +149,7 @@ class helpers:
                     data_dict['Damage Multiplier'].append(
                         round['damageMultiplier'])
                     
-                    url_ = "<a href=\"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&heading=0&pitch=0&fov=80\">loc link</a>"
+                    url_ = "<a href=\"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + str(round['panorama']['lat']) + "," + str(round['panorama']['lng']) + "&heading=0&pitch=0&fov=80\">loc link</a>< br/>Score difference:" + str(data_dict['Your Score'][-1] - data_dict['Opponent Score'][-1])
                     data_dict['Pano URL'].append(url_)
                     # if no guess is made, there is no entry in guesses of that round, so we find if the round number in round and guess are same, if not, then NAN.
                     my_guess = [guess for guess in game['teams'][me]
@@ -882,7 +882,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                         size=6,
                         color=df_filtered[metric_col]
                         ),
-                        text=df_filtered['Pano URL'] + ", " + str(df_filtered[metric_col]),
+                        text=df_filtered['Pano URL'],
                         hoverinfo='text'
                         ))
 
@@ -908,30 +908,6 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     fig.update_layout(map_style="open-street-map")
                     fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
                     st.plotly_chart(fig)
-
-
-                    @app.callback(
-                        Output('scatter-plot', 'figure'),
-                        Input('scatter-plot', 'clickData')
-                    )
-                    def update_scatter_plot(clickData):
-                        fig.update_traces(hovertemplate='Click me!<extra></extra>')
-                    # Add custom hover text for each point
-                        return fig
-
-                    @app.callback(
-                        Output('scatter-plot', 'clickData'),
-                        Input('scatter-plot', 'clickData')
-                    )
-                    def display_click_data(clickData):
-                        if clickData:
-                            point_index = clickData['points'][0]['pointIndex']
-                        url = df['Pano URL'][point_index]
-                        # Open the URL in a new tab
-                        import webbrowser
-                        webbrowser.open(url)
-                    
-                        return clickData
 
                     #if __name__ == '__main__':
                     #    app.run_server(debug=True, use_reloader=False, port=4444)
