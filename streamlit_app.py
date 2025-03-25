@@ -804,18 +804,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     st.write(f"\t{metric_col} %")
                     lat_col = df_filtered['Latitude'].loc[df_filtered['Game Mode'] == gametype]
                     lon_col = df_filtered['Longitude'].loc[df_filtered['Game Mode'] == gametype]
-                    color_ = {"sequential": [
-                    [0, 'rgb(191, 34, 34)'], 
-                    [0.3, 'rgb(243, 10, 10)'],
-                    [0.5, 'rgb(234, 174, 19)'],
-                    [0.75, 'rgb(220, 231, 22)'],
-                    [0.85, 'rgb(26, 227, 40)'],
-                    [0.90, 'rgb(34, 187, 175)'],
-                    [0.95, 'rgb(24, 111, 197)'],
-                    [0.995, 'rgb(47, 47, 255)'],
-                    [0.996, 'rgb(255, 255, 255)'],
-                    [1, 'rgb(255, 255, 255)']
-                    ]}
+
 
                     if metric_col == 'Distance':
                         metric_col = 'Your Distance'
