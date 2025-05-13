@@ -846,7 +846,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                         [0.5, '#b2b0a9'],
                         [0.510, '#aabe93'],
                         [0.525, '#91cb81'],
-                        [0.55, '#49a930)'],
+                        [0.55, '#49a930'],
                         [0.6, '#0e7b00'],
                         [0.8, '#26369b'],
                         [1, '#000e7a']
