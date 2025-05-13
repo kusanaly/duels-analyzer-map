@@ -879,9 +879,12 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                         lat=lat_col,
                         lon=lon_col,
                         mode='markers',
-                        marker=go.scattermap.Marker(
+                        marker=dict(
                         size=6,
-                        color=df_filtered[metric_col]
+                        color=df_filtered[metric_col],
+                        colorscale=color_["sequential"],  # Your dynamic custom scale
+                        colorbar=dict(title=metric_col),
+                        showscale=True
                         ),
                         text=df_filtered['Pano URL'],
                         hoverinfo='text'
