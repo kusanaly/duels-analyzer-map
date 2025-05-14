@@ -803,9 +803,11 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     st.markdown(f"#### All your guesses, colored by {metric}")
                     
                     st.write(f"\t{metric_col} %")
-                    lat_col = df_filtered['Latitude'].loc[df_filtered['Game Mode'] == gametype]
-                    lon_col = df_filtered['Longitude'].loc[df_filtered['Game Mode'] == gametype]
-
+                    df_filtered = df[df['Game Mode'] == gametype].copy()
+                    df_filtered.reset_index(drop=True, inplace=True)
+                    
+                    lat_col = df_filtered['Latitude']
+                    lon_col = df_filtered['Longitude']
 
                     if metric_col == 'Distance':
                         metric_col = 'Your Distance'
