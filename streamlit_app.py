@@ -17,9 +17,6 @@ import geopandas as gpd
 import networkx as nx
 import matplotlib.pyplot as plt
 
-
-
-
 class helpers:
     @staticmethod
     def time_in_utc_530():
