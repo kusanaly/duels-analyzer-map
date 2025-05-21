@@ -8,3 +8,4 @@ dash==2.18.0
 geopandas
 shapely
 networkx
+matplotlib

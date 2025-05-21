@@ -157,13 +157,20 @@ class helpers:
         borders = borders.to_crs(epsg=4326)
 
         # Create Point objects from guess coordinates
-        guess_df['geometry'] = [Point(xy) for xy in zip(guess_df['Your Latitude'], guess_df['Your Longitude'])]
+        guess_df['geometry'] = [Point(xy) for xy in zip(guess_df['Your Longitude'], guess_df['Your Latitude'])]
         guess_gdf = gpd.GeoDataFrame(guess_df, geometry='geometry', crs='EPSG:4326')
 
         st.markdown('Joined geodataframes')
 
         st.write(guess_gdf.crs)
         st.write(borders.crs)
+
+        import matplotlib.pyplot as plt
+
+        fig, ax = plt.subplots(figsize=(10, 10))
+        borders.plot(ax=ax, edgecolor='black')
+        guess_gdf.plot(ax=ax, color='red', markersize=5)
+        plt.show()
 
         # Spatial join: assign each point to the country it falls within
         joined = gpd.sjoin(guess_gdf, borders, how='left', predicate='within')
