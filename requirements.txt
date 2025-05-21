@@ -7,3 +7,4 @@ streamlit==1.42.2
 dash==2.18.0
 geopandas
 shapely
+networkx
