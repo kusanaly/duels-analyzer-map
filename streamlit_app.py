@@ -165,8 +165,10 @@ class helpers:
 
         # Assume the country name is in a column like 'name' or 'ADMIN' in the GeoJSON
         if 'name' in joined.columns:
-            joined.rename(columns={'sovereignt': 'guess_country'}, inplace=True)
+            joined.rename(columns={'name': 'guess_country'}, inplace=True)
         elif 'ADMIN' in joined.columns:
+            joined.rename(columns={'ADMIN': 'guess_country'}, inplace=True)
+        elif 'sovereignt' in joined.columns:
             joined.rename(columns={'sovereignt': 'guess_country'}, inplace=True)
         else:
             raise ValueError("Could not find a recognizable name column in borders.json")
