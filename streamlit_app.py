@@ -165,25 +165,14 @@ class helpers:
         st.write(guess_gdf.crs)
         st.write(borders.crs)
 
-        import matplotlib.pyplot as plt
-
-        fig, ax = plt.subplots(figsize=(10, 10))
-        borders.plot(ax=ax, edgecolor='black')
-        guess_gdf.plot(ax=ax, color='red', markersize=5)
-        plt.show()
-
         # Spatial join: assign each point to the country it falls within
         joined = gpd.sjoin(guess_gdf, borders, how='left', predicate='within')
 
         # Assume the country name is in a column like 'name' or 'ADMIN' in the GeoJSON
-        if 'name' in joined.columns:
-            joined.rename(columns={'name': 'guess_country'}, inplace=True)
-        elif 'ADMIN' in joined.columns:
-            joined.rename(columns={'ADMIN': 'guess_country'}, inplace=True)
-        elif 'sovereignt' in joined.columns:
+        if 'sovereignt' in joined.columns:
             joined.rename(columns={'sovereignt': 'guess_country'}, inplace=True)
         else:
-            st.markdown('No recognizable name column')
+            st.write('no sovereignt')
 
         st.write(joined.columns)
         st.write(joined.head())
@@ -891,8 +880,8 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
             if not df_filtered.empty:
                 st.markdown('Calculating countries')
 
-                df_filtered = helpers.assign_guess_countries(df_filtered, borders_path="borders.json")
-                df_filtered = df_filtered.drop(columns=["geometry"], errors="ignore")
+                df_countries = helpers.assign_guess_countries(df_filtered, borders_path="borders.json")
+                df_filtered = df_countries.drop(columns=["geometry"], errors="ignore")
                 
                 st.markdown('### Detailed Analysis')
                 with st.expander(""):
