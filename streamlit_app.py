@@ -160,9 +160,10 @@ class helpers:
         guess_df['geometry'] = [Point(xy) for xy in zip(guess_df['Your Latitude'], guess_df['Your Longitude'])]
         guess_gdf = gpd.GeoDataFrame(guess_df, geometry='geometry', crs='EPSG:4326')
 
-        print(guess_gdf.crs)
-        print(borders.crs)
+        st.markdown('Joined geodataframes')
 
+        st.write(guess_gdf.crs)
+        st.write(borders.crs)
 
         # Spatial join: assign each point to the country it falls within
         joined = gpd.sjoin(guess_gdf, borders, how='left', predicate='within')
