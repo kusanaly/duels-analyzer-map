@@ -176,7 +176,11 @@ class helpers:
         elif 'sovereignt' in joined.columns:
             joined.rename(columns={'sovereignt': 'guess_country'}, inplace=True)
         else:
-            raise ValueError("Could not find a recognizable name column in borders.json")
+            st.markdown('No recognizable name column')
+
+        st.write(joined.columns)
+        st.write(joined.head())
+
 
         return pd.DataFrame(joined.drop(columns='geometry'))
 
