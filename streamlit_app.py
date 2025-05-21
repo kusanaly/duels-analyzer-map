@@ -14,6 +14,8 @@ from datetime import timedelta
 import datetime
 from shapely.geometry import Point
 import geopandas as gpd
+import networkx as nx
+
 
 
 class helpers:
@@ -85,6 +87,66 @@ class helpers:
             return {}
         return {'id': player_data['id'],
                 'nick': player_data['nick']}
+
+    @staticmethod
+    def build_confusion_graph(df, max_connections=4):
+        confusion_df = df[df['actual_country'] != df['guess_country']]
+        actual_counts = df['actual_country'].value_counts().to_dict()
+
+        # Compute relative confusion frequency
+        confusion_df = (
+            confusion_df.groupby(['actual_country', 'guess_country'])
+            .size()
+            .reset_index(name='count')
+        )
+        confusion_df['weight'] = confusion_df.apply(
+            lambda row: row['count'] / actual_counts[row['actual_country']], axis=1
+        )
+
+        # Create undirected graph and ensure mutual confusion is aggregated
+        G = nx.Graph()
+
+        # Add weighted edges (aggregate both directions)
+        for _, row in confusion_df.iterrows():
+            a, b, w = row['actual_country'], row['guess_country'], row['weight']
+            if G.has_edge(a, b):
+                G[a][b]['weight'] += w  # mutual confusion
+            else:
+                G.add_edge(a, b, weight=w)
+
+        # Limit each node to `max_connections` strongest edges
+        for node in list(G.nodes):
+            edges = sorted(G.edges(node, data=True), key=lambda x: x[2]['weight'], reverse=True)
+            for edge in edges[max_connections:]:
+                G.remove_edge(edge[0], edge[1])
+
+        return G
+
+# STEP 3: Draw graph where distances reflect confusion strength
+    @staticmethod
+    def draw_confusion_graph(G):
+        # Higher weight = closer in layout => use inverse weight
+        for u, v, d in G.edges(data=True):
+            d['distance'] = 1 / d['weight']
+
+        # Spring layout uses 'distance' as length parameter
+        pos = nx.spring_layout(G, weight='distance', seed=42)
+
+        plt.figure(figsize=(12, 10))
+        nx.draw_networkx_nodes(G, pos, node_size=1000, node_color='lightblue')
+        nx.draw_networkx_labels(G, pos, font_size=10)
+
+        edges = G.edges(data=True)
+        widths = [d['weight'] * 5 for _, _, d in edges]
+        nx.draw_networkx_edges(G, pos, width=widths, alpha=0.6)
+
+        edge_labels = {(u, v): f"{d['weight']:.2f}" for u, v, d in edges}
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8)
+
+        plt.title("Country Confusion Social Graph (limited to 4 connections per country)", fontsize=14)
+        plt.axis('off')
+        plt.tight_layout()
+        plt.show()
 
     @staticmethod
     def assign_guess_countries(guess_df, borders_path="borders.json"):
@@ -810,8 +872,10 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
 
             if not df_filtered.empty:
                 st.markdown('Calculating countries')
-                df_with_countries = helpers.assign_guess_countries(df, borders_path="borders.json")
 
+                df_filtered = helpers.assign_guess_countries(df_filtered, borders_path="borders.json")
+                df_filtered = df_filtered.drop(columns=["geometry"], errors="ignore")
+                
                 st.markdown('### Detailed Analysis')
                 with st.expander(""):
                     metric = st.radio(
