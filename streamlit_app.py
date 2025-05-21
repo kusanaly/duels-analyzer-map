@@ -145,7 +145,8 @@ class helpers:
         plt.title("Country Confusion Social Graph (limited to 4 connections per country)", fontsize=14)
         plt.axis('off')
         plt.tight_layout()
-        plt.show()
+        st.pyplot(plt.gcf())
+        plt.clf()
 
     @staticmethod
     def assign_guess_countries(guess_df, borders_path="borders.json"):
