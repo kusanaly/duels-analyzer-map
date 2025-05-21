@@ -123,7 +123,7 @@ class helpers:
 
 # STEP 3: Draw graph where distances reflect confusion strength
     @staticmethod
-    def draw_confusion_graph(G):def draw_confusion_graph_interactive(G):
+    def draw_confusion_graph(G):
         pos = nx.spring_layout(G, weight='distance', seed=42)
 
         edge_x = []
