@@ -12,6 +12,8 @@ import plotly.graph_objects as go
 import altair as alt
 from datetime import timedelta
 import datetime
+from shapely.geometry import Point
+import geopandas as gpd
 
 
 class helpers:
@@ -83,6 +85,31 @@ class helpers:
             return {}
         return {'id': player_data['id'],
                 'nick': player_data['nick']}
+
+    @staticmethod
+    def assign_guess_countries(guess_df, borders_path="borders.json"):
+        # Load the country borders from your GeoJSON
+        borders = gpd.read_file(borders_path)
+
+        # Ensure CRS (coordinate reference system) is WGS84 (lat/lon)
+        borders = borders.to_crs(epsg=4326)
+
+        # Create Point objects from guess coordinates
+        guess_df['geometry'] = [Point(xy) for xy in zip(guess_df['Your Latitude'], guess_df['Your Longitude'])]
+        guess_gdf = gpd.GeoDataFrame(guess_df, geometry='geometry', crs='EPSG:4326')
+
+        # Spatial join: assign each point to the country it falls within
+        joined = gpd.sjoin(guess_gdf, borders, how='left', predicate='within')
+
+        # Assume the country name is in a column like 'name' or 'ADMIN' in the GeoJSON
+        if 'name' in joined.columns:
+            joined.rename(columns={'name': 'guess_country'}, inplace=True)
+        elif 'ADMIN' in joined.columns:
+            joined.rename(columns={'ADMIN': 'guess_country'}, inplace=True)
+        else:
+            raise ValueError("Could not find a recognizable country name column in borders.json")
+
+        return pd.DataFrame(joined.drop(columns='geometry'))
 
     @staticmethod
     def get_duels(session, duel_tokens, my_player_Id, loading_bar):
@@ -782,6 +809,9 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                 by='Number of Rounds', ascending=False).head(top_n)
 
             if not df_filtered.empty:
+                st.markdown('Calculating countries')
+                df_with_countries = helpers.assign_guess_countries(df, borders_path="borders.json")
+
                 st.markdown('### Detailed Analysis')
                 with st.expander(""):
                     metric = st.radio(
