@@ -88,7 +88,7 @@ class helpers:
                 'nick': player_data['nick']}
 
     @staticmethod
-    def build_confusion_graph(df, max_connections=4):
+    def build_confusion_graph(df, max_connections=6):
         confusion_df = df[df['Country'] != df['guess_country']]
         actual_counts = df['Country'].value_counts().to_dict()
 
