@@ -123,30 +123,56 @@ class helpers:
 
 # STEP 3: Draw graph where distances reflect confusion strength
     @staticmethod
-    def draw_confusion_graph(G):
-        # Higher weight = closer in layout => use inverse weight
-        for u, v, d in G.edges(data=True):
-            d['distance'] = 1 / d['weight']
-
-        # Spring layout uses 'distance' as length parameter
+    def draw_confusion_graph(G):def draw_confusion_graph_interactive(G):
         pos = nx.spring_layout(G, weight='distance', seed=42)
 
-        plt.figure(figsize=(12, 10))
-        nx.draw_networkx_nodes(G, pos, node_size=1000, node_color='lightblue')
-        nx.draw_networkx_labels(G, pos, font_size=10)
+        edge_x = []
+        edge_y = []
+        for edge in G.edges():
+            x0, y0 = pos[edge[0]]
+            x1, y1 = pos[edge[1]]
+            edge_x += [x0, x1, None]
+            edge_y += [y0, y1, None]
 
-        edges = G.edges(data=True)
-        widths = [d['weight'] * 5 for _, _, d in edges]
-        nx.draw_networkx_edges(G, pos, width=widths, alpha=0.6)
+        edge_trace = go.Scatter(
+            x=edge_x, y=edge_y,
+            line=dict(width=1, color='#888'),
+            hoverinfo='none',
+            mode='lines')
 
-        edge_labels = {(u, v): f"{d['weight']:.2f}" for u, v, d in edges}
-        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8)
+        node_x = []
+        node_y = []
+        node_text = []
+        for node in G.nodes():
+            x, y = pos[node]
+            node_x.append(x)
+            node_y.append(y)
+            node_text.append(str(node))
 
-        plt.title("Country Confusion Social Graph (limited to 4 connections per country)", fontsize=14)
-        plt.axis('off')
-        plt.tight_layout()
-        st.pyplot(plt.gcf())
-        plt.clf()
+        node_trace = go.Scatter(
+            x=node_x, y=node_y,
+            mode='markers+text',
+            text=node_text,
+            textposition='top center',
+            hoverinfo='text',
+            marker=dict(
+                showscale=False,
+                color='lightblue',
+                size=20,
+                line_width=2))
+
+        fig = go.Figure(data=[edge_trace, node_trace],
+                        layout=go.Layout(
+                            title="Interactive Country Confusion Graph",
+                            titlefont_size=16,
+                            showlegend=False,
+                            hovermode='closest',
+                            margin=dict(b=20, l=5, r=5, t=40),
+                            xaxis=dict(showgrid=False, zeroline=False, visible=False),
+                            yaxis=dict(showgrid=False, zeroline=False, visible=False))
+                        )
+
+        st.plotly_chart(fig, use_container_width=True)
 
     @staticmethod
     def assign_guess_countries(guess_df, borders_path="borders.json"):
