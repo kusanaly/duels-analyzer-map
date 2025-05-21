@@ -15,6 +15,8 @@ import datetime
 from shapely.geometry import Point
 import geopandas as gpd
 import networkx as nx
+import matplotlib.pyplot as plt
+
 
 
 
@@ -90,17 +92,17 @@ class helpers:
 
     @staticmethod
     def build_confusion_graph(df, max_connections=4):
-        confusion_df = df[df['actual_country'] != df['guess_country']]
-        actual_counts = df['actual_country'].value_counts().to_dict()
+        confusion_df = df[df['Country'] != df['guess_country']]
+        actual_counts = df['Country'].value_counts().to_dict()
 
         # Compute relative confusion frequency
         confusion_df = (
-            confusion_df.groupby(['actual_country', 'guess_country'])
+            confusion_df.groupby(['Country', 'guess_country'])
             .size()
             .reset_index(name='count')
         )
         confusion_df['weight'] = confusion_df.apply(
-            lambda row: row['count'] / actual_counts[row['actual_country']], axis=1
+            lambda row: row['count'] / actual_counts[row['Country']], axis=1
         )
 
         # Create undirected graph and ensure mutual confusion is aggregated
@@ -108,7 +110,7 @@ class helpers:
 
         # Add weighted edges (aggregate both directions)
         for _, row in confusion_df.iterrows():
-            a, b, w = row['actual_country'], row['guess_country'], row['weight']
+            a, b, w = row['Country'], row['guess_country'], row['weight']
             if G.has_edge(a, b):
                 G[a][b]['weight'] += w  # mutual confusion
             else:
@@ -880,8 +882,8 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
             if not df_filtered.empty:
                 st.markdown('Calculating countries')
 
-                df_countries = helpers.assign_guess_countries(df_filtered, borders_path="borders.json")
-                df_filtered = df_countries.drop(columns=["geometry"], errors="ignore")
+                df_with_countries = helpers.assign_guess_countries(df_filtered, borders_path="borders.json")
+                df_with_countries = df_with_countries.drop(columns=["geometry"], errors="ignore")           
                 
                 st.markdown('### Detailed Analysis')
                 with st.expander(""):
@@ -904,7 +906,7 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     st.markdown(f"#### All your guesses, colored by {metric}")
                     
                     st.write(f"\t{metric_col} %")
-                    df_filtered = df[df['Game Mode'] == gametype].copy()
+                    df_filtered = df_with_countries[df_with_countries['Game Mode'] == gametype].copy()
                     df_filtered.reset_index(drop=True, inplace=True)
                     
                     lat_col = df_filtered['Latitude']
@@ -1015,6 +1017,11 @@ if (submitted_token or st.session_state['submitted_token']) and _ncfa:
                     fig.update_layout(map_style="open-street-map")
                     fig.update_layout(margin={"r": 0, "t": 40, "l": 0, "b": 0})
                     st.plotly_chart(fig)
+
+                    G = helpers.build_confusion_graph(df_with_countries)
+
+                    # Step 3: Draw
+                    helpers.draw_confusion_graph(G)
 
                     #if __name__ == '__main__':
                     #    app.run_server(debug=True, use_reloader=False, port=4444)
