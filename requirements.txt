@@ -9,3 +9,4 @@ geopandas
 shapely
 networkx
 matplotlib
+fiona
