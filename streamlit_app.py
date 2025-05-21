@@ -16,6 +16,7 @@ from shapely.geometry import Point
 import geopandas as gpd
 import networkx as nx
 import matplotlib.pyplot as plt
+import fiona
 
 class helpers:
     @staticmethod
@@ -772,6 +773,8 @@ class helpers:
         st.plotly_chart(fig, use_container_width=False)
 
 
+layers = fiona.listlayers("gadm_410.gdb")
+print(layers)
 
 
 st.title('Welcome to Duels Analyzer')
